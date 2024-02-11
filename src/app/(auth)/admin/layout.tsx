@@ -1,7 +1,4 @@
 import { SignOutButton } from '@/components/SignOutButton'
-import { Button } from '@/components/ui'
-import { AvatarIcon } from '@radix-ui/react-icons'
-import { signOut } from 'next-auth/react'
 
 export default function Layout({
   children,

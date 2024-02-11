@@ -26,8 +26,12 @@ export default function LoginPage() {
 
       if (response?.ok) {
         router.push('/admin/team/create')
+        return
       }
-    } catch {}
+      console.log(response?.error)
+    } catch {
+      console.log('erro')
+    }
   })
 
   return (
