@@ -1,0 +1,122 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model championship {
+  id                  Int                   @id @default(autoincrement())
+  name                String                @db.VarChar(255)
+  active              Boolean?
+  match               match[]
+  player_championship player_championship[]
+  team_championship   team_championship[]
+}
+
+model coach {
+  id                Int                 @id @default(autoincrement())
+  name              String              @db.VarChar(100)
+  age               Int
+  picture           String?
+  team_championship team_championship[]
+}
+
+model goal {
+  id                  Int                 @id @default(autoincrement())
+  id_match            Int
+  id_player           Int
+  id_team             Int
+  id_championship     Int
+  match               match               @relation(fields: [id_match], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_match")
+  player_championship player_championship @relation(fields: [id_player, id_championship, id_team], references: [id_player, id_championship, id_team], onDelete: NoAction, onUpdate: NoAction, map: "fk_player")
+}
+
+model match {
+  id              Int          @id @default(autoincrement())
+  id_referee      Int
+  id_championship Int
+  goal            goal[]
+  championship    championship @relation(fields: [id_championship], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_championship")
+  referee         referee      @relation(fields: [id_referee], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_referee")
+}
+
+model match_stats {
+  id_match                                Int      @id
+  id_home_team                            Int
+  id_visiting_team                        Int
+  id_winner                               Int?
+  is_draw                                 Boolean? @default(dbgenerated("\nCASE\n    WHEN (id_winner IS NULL) THEN true\n    ELSE false\nEND"))
+  team_match_stats_id_home_teamToteam     team     @relation("match_stats_id_home_teamToteam", fields: [id_home_team], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_home_team")
+  team_match_stats_id_visiting_teamToteam team     @relation("match_stats_id_visiting_teamToteam", fields: [id_visiting_team], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_visiting_team")
+  team_match_stats_id_winnerToteam        team?    @relation("match_stats_id_winnerToteam", fields: [id_winner], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_winner")
+}
+
+model player {
+  id                  Int                   @id @default(autoincrement())
+  name                String                @db.VarChar(100)
+  age                 Int
+  origin              String?               @db.VarChar(100)
+  picture             String?
+  dominant_leg        String                @db.Char(1)
+  player_championship player_championship[]
+}
+
+model player_championship {
+  id_player       Int
+  id_championship Int
+  id_team         Int
+  goal            goal[]
+  championship    championship @relation(fields: [id_championship], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_championshipt")
+  player          player       @relation(fields: [id_player], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_player")
+  team            team         @relation(fields: [id_team], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_team")
+
+  @@id([id_player, id_championship, id_team])
+}
+
+model referee {
+  id      Int     @id @default(autoincrement())
+  name    String? @db.VarChar(100)
+  age     Int
+  picture String
+  match   match[]
+}
+
+model team {
+  id                                             Int                   @id @default(autoincrement())
+  name                                           String                @db.VarChar(100)
+  emblem                                         String?
+  match_stats_match_stats_id_home_teamToteam     match_stats[]         @relation("match_stats_id_home_teamToteam")
+  match_stats_match_stats_id_visiting_teamToteam match_stats[]         @relation("match_stats_id_visiting_teamToteam")
+  match_stats_match_stats_id_winnerToteam        match_stats[]         @relation("match_stats_id_winnerToteam")
+  player_championship                            player_championship[]
+  team_championship                              team_championship[]
+  user                                           user[]
+}
+
+model team_championship {
+  id_team         Int
+  id_championship Int
+  id_coach        Int?
+  championship    championship @relation(fields: [id_championship], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_championshipt")
+  coach           coach?       @relation(fields: [id_coach], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_coach")
+  team            team         @relation(fields: [id_team], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_team")
+
+  @@id([id_team, id_championship])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model user {
+  username String @id @db.VarChar(255)
+  name     String @db.VarChar(255)
+  password String
+  type     String @db.VarChar(50)
+  id_team  Int?
+  team     team?  @relation(fields: [id_team], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_team")
+}
+
+model test {
+  id Int @id @default(autoincrement())
+}

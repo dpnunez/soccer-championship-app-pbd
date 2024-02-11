@@ -17,9 +17,7 @@ export default function CreateTeamPage() {
 
   const emblem = form.watch('emblem')
 
-  const onSubmit = () => {
-    console.log('aqui')
-  }
+  const onSubmit = () => {}
 
   const isLinkRegex = /^(http|https):\/\/[^ "]+$/
   const isValidLink = isLinkRegex.test(emblem)
