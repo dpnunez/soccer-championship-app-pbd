@@ -116,7 +116,3 @@ model user {
   id_team  Int?
   team     team?  @relation(fields: [id_team], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_team")
 }
-
-model test {
-  id Int @id @default(autoincrement())
-}

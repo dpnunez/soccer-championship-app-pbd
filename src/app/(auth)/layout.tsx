@@ -1,20 +1,14 @@
+import { authConfig } from '@/lib/next-auth'
 import { getServerSession } from 'next-auth'
-import Link from 'next/link'
+import { redirect } from 'next/navigation'
 
-export default async function Layout({
+export default async function AuthHandler({
   children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
-  const session = await getServerSession()
+}: Readonly<{ children: React.ReactNode }>) {
+  const session = await getServerSession(authConfig)
+  if (!session) {
+    redirect('/sign-in')
+  }
 
-  if (!session?.user)
-    return (
-      <div>
-        <h1>Not logged in</h1>
-        <Link href="/sign-in">Sign in</Link>
-      </div>
-    )
-
-  return <>{children}</>
+  return <div>{children}</div>
 }

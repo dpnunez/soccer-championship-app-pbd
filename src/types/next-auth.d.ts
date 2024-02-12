@@ -8,10 +8,12 @@ declare module 'next-auth' {
   interface User {
     username: string
     name: string
+    type: 'admin' | 'owner'
   }
   interface Session {
     user: User & {
       username: string
+      type: 'admin' | 'owner'
     }
     token: {
       username: string

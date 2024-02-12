@@ -8,6 +8,7 @@ import {
   CardTitle,
   Input,
 } from '@/components/ui'
+import { useToast } from '@/components/ui/use-toast'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
@@ -15,6 +16,7 @@ import { useForm } from 'react-hook-form'
 export default function LoginPage() {
   const form = useForm()
   const router = useRouter()
+  const { toast } = useToast()
 
   const onSubmit = form.handleSubmit(async (data) => {
     try {
@@ -25,10 +27,14 @@ export default function LoginPage() {
       })
 
       if (response?.ok) {
-        router.push('/admin/team/create')
+        router.push('/auth')
         return
       }
-      console.log(response?.error)
+      toast({
+        title: 'Erro',
+        description: 'Usuário ou senha inválidos',
+        variant: 'destructive',
+      })
     } catch {
       console.log('erro')
     }

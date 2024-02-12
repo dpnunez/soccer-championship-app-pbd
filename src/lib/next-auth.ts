@@ -42,6 +42,7 @@ export const authConfig: NextAuthOptions = {
           id: user.username,
           username: user.username,
           name: user.name,
+          type: user.type as 'admin' | 'owner',
         }
       },
     }),
@@ -52,6 +53,7 @@ export const authConfig: NextAuthOptions = {
         return {
           ...token,
           username: user.username,
+          type: user.type,
         }
       }
       return token
@@ -62,6 +64,7 @@ export const authConfig: NextAuthOptions = {
         user: {
           ...session.user,
           username: token.username,
+          type: token.type,
         },
       }
     },
