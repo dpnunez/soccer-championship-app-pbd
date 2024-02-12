@@ -92,7 +92,7 @@ export function CreateChampionshipForm({ teams }: { teams: Team[] }) {
 
       router.push('/admin')
     } catch (err) {
-      console.log(err)
+      toast(err.toastInfo)
     }
   })
 

@@ -5,6 +5,19 @@ export async function POST(req: Request) {
   // ToDo: add session validation
   const { name, teams } = await req.json()
 
+  if (teams.length < 3) {
+    return NextResponse.json(
+      {
+        toastInfo: {
+          title: 'Quantidade de times insuficiente',
+        },
+      },
+      {
+        status: 401,
+      },
+    )
+  }
+
   const res = await prisma.championship.create({
     data: {
       name,
