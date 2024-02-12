@@ -1,5 +1,6 @@
 'use client'
 
+import { TeamEmblem } from '@/components/TeamEmblem'
 import {
   Button,
   Form,
@@ -98,12 +99,8 @@ export default function CreateTeamPage() {
             <Button type="submit">Criar Time</Button>
           </div>
           <div className="overflow-hidden flex-1 ring-slate-200 ring-1 rounded-lg">
-            <img
-              src={
-                isValidLink
-                  ? emblem
-                  : 'https://img.freepik.com/premium-vector/soccer-badge-vector-template-football-graphic-illustration-badge-emblem-designs-style_687309-509.jpg?w=1800'
-              }
+            <TeamEmblem
+              emblem={isValidLink && emblem}
               className="flex-1 aspect-square"
             />
           </div>

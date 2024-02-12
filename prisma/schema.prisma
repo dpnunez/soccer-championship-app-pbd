@@ -10,7 +10,8 @@ datasource db {
 model championship {
   id                  Int                   @id @default(autoincrement())
   name                String                @db.VarChar(255)
-  active              Boolean?
+  status              String                @db.VarChar(50)
+  goal                goal[]
   match               match[]
   player_championship player_championship[]
   team_championship   team_championship[]
@@ -30,8 +31,10 @@ model goal {
   id_player           Int
   id_team             Int
   id_championship     Int
+  championship        championship        @relation(fields: [id_championship], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_championship")
   match               match               @relation(fields: [id_match], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_match")
   player_championship player_championship @relation(fields: [id_player, id_championship, id_team], references: [id_player, id_championship, id_team], onDelete: NoAction, onUpdate: NoAction, map: "fk_player")
+  team_championship   team_championship   @relation(fields: [id_team, id_championship], references: [id_team, id_championship], onDelete: NoAction, onUpdate: NoAction, map: "fk_team")
 }
 
 model match {
@@ -41,17 +44,20 @@ model match {
   goal            goal[]
   championship    championship @relation(fields: [id_championship], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_championship")
   referee         referee      @relation(fields: [id_referee], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_referee")
+  match_stats     match_stats?
 }
 
 model match_stats {
-  id_match                                Int      @id
-  id_home_team                            Int
-  id_visiting_team                        Int
-  id_winner                               Int?
-  is_draw                                 Boolean? @default(dbgenerated("\nCASE\n    WHEN (id_winner IS NULL) THEN true\n    ELSE false\nEND"))
-  team_match_stats_id_home_teamToteam     team     @relation("match_stats_id_home_teamToteam", fields: [id_home_team], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_home_team")
-  team_match_stats_id_visiting_teamToteam team     @relation("match_stats_id_visiting_teamToteam", fields: [id_visiting_team], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_visiting_team")
-  team_match_stats_id_winnerToteam        team?    @relation("match_stats_id_winnerToteam", fields: [id_winner], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_winner")
+  id_match                                                                       Int                @id
+  id_championship                                                                Int
+  home_team                                                                      Int
+  visiting_team                                                                  Int
+  winner                                                                         Int?
+  is_draw                                                                        Boolean?           @default(dbgenerated("\nCASE\n    WHEN (winner IS NULL) THEN true\n    ELSE false\nEND"))
+  team_championship_match_stats_home_team_id_championshipToteam_championship     team_championship  @relation("match_stats_home_team_id_championshipToteam_championship", fields: [home_team, id_championship], references: [id_team, id_championship], onDelete: NoAction, onUpdate: NoAction, map: "fk_home_team")
+  match                                                                          match              @relation(fields: [id_match], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_match")
+  team_championship_match_stats_visiting_team_id_championshipToteam_championship team_championship  @relation("match_stats_visiting_team_id_championshipToteam_championship", fields: [visiting_team, id_championship], references: [id_team, id_championship], onDelete: NoAction, onUpdate: NoAction, map: "fk_visiting_team")
+  team_championship_match_stats_winner_id_championshipToteam_championship        team_championship? @relation("match_stats_winner_id_championshipToteam_championship", fields: [winner, id_championship], references: [id_team, id_championship], onDelete: NoAction, onUpdate: NoAction, map: "fk_winner")
 }
 
 model player {
@@ -69,7 +75,7 @@ model player_championship {
   id_championship Int
   id_team         Int
   goal            goal[]
-  championship    championship @relation(fields: [id_championship], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_championshipt")
+  championship    championship @relation(fields: [id_championship], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_championship")
   player          player       @relation(fields: [id_player], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_player")
   team            team         @relation(fields: [id_team], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_team")
 
@@ -85,24 +91,25 @@ model referee {
 }
 
 model team {
-  id                                             Int                   @id @default(autoincrement())
-  name                                           String                @db.VarChar(100)
-  emblem                                         String?
-  match_stats_match_stats_id_home_teamToteam     match_stats[]         @relation("match_stats_id_home_teamToteam")
-  match_stats_match_stats_id_visiting_teamToteam match_stats[]         @relation("match_stats_id_visiting_teamToteam")
-  match_stats_match_stats_id_winnerToteam        match_stats[]         @relation("match_stats_id_winnerToteam")
-  player_championship                            player_championship[]
-  team_championship                              team_championship[]
-  user                                           user[]
+  id                  Int                   @id @default(autoincrement())
+  name                String                @db.VarChar(100)
+  emblem              String?
+  player_championship player_championship[]
+  team_championship   team_championship[]
+  user                user[]
 }
 
 model team_championship {
-  id_team         Int
-  id_championship Int
-  id_coach        Int?
-  championship    championship @relation(fields: [id_championship], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_championshipt")
-  coach           coach?       @relation(fields: [id_coach], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_coach")
-  team            team         @relation(fields: [id_team], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_team")
+  id_team                                                                  Int
+  id_championship                                                          Int
+  id_coach                                                                 Int?
+  goal                                                                     goal[]
+  match_stats_match_stats_home_team_id_championshipToteam_championship     match_stats[] @relation("match_stats_home_team_id_championshipToteam_championship")
+  match_stats_match_stats_visiting_team_id_championshipToteam_championship match_stats[] @relation("match_stats_visiting_team_id_championshipToteam_championship")
+  match_stats_match_stats_winner_id_championshipToteam_championship        match_stats[] @relation("match_stats_winner_id_championshipToteam_championship")
+  championship                                                             championship  @relation(fields: [id_championship], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_championship")
+  coach                                                                    coach?        @relation(fields: [id_coach], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_coach")
+  team                                                                     team          @relation(fields: [id_team], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_team")
 
   @@id([id_team, id_championship])
 }

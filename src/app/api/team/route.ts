@@ -40,3 +40,9 @@ export async function POST(req: Request) {
     message: 'Time criado com sucesso',
   })
 }
+
+export async function GET() {
+  const teams = await prisma.team.findMany()
+
+  return NextResponse.json(teams)
+}

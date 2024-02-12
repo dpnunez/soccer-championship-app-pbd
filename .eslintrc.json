@@ -1,6 +1,8 @@
 {
   "extends": ["next/core-web-vitals", "@rocketseat/eslint-config/next"],
   "rules": {
-    "no-var": "off"
+    "no-var": "off",
+    "camelcase": "off",
+    "@next/next/no-img-element": "off"
   }
 }
