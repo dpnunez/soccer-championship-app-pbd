@@ -13,7 +13,6 @@ export async function POST(req: Request) {
   })
   const championshipId = res.id
 
-  // add teams to championship
   const teamsRes = await prisma.team_championship.createMany({
     data: teams.map((teamId: number) => ({
       id_team: teamId,
@@ -32,4 +31,10 @@ export async function POST(req: Request) {
       description: `O campeonato ${name} foi criado com sucesso!`,
     },
   })
+}
+
+export async function GET() {
+  const teams = await prisma.championship.findMany()
+
+  return NextResponse.json(teams)
 }

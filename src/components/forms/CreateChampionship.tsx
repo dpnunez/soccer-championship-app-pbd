@@ -116,10 +116,7 @@ export function CreateChampionshipForm({ teams }: { teams: Team[] }) {
           />
           <div>
             <h2 className="text-2xl font-bold">Participantes</h2>
-            <h3 className="text-lg text-slate-600 mb-5">
-              Outros participates poderão ser adicionados futuramente
-            </h3>
-            {teams && <SelectTeams teams={teams} />}
+            <SelectTeams teams={teams} />
           </div>
           <Button>Criar Campeonato</Button>
         </div>
