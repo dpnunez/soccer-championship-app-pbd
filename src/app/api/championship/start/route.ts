@@ -1,26 +1,36 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 
+interface MatchesLocal {
+  home_team: number
+  visiting_team: number
+}
+
 export async function POST(req: Request) {
   // ToDo: add session validation
   const { id } = await req.json()
 
-  const res = await prisma.championship.update({
+  const teams = await prisma.team_championship.findMany({
     where: {
-      id,
-    },
-    data: {
-      status: 'started',
+      id_championship: id,
     },
   })
 
-  // ToDo: gerar rodadas
-  // Transform alguns campos do banco opcionais (para antes do cadastro da partida)
+  const team_ids = teams.map((team) => team.id_team)
+
+  // arranjo 2 a 2  de teams_ids
+  const matches: MatchesLocal[] = []
+  for (let i = 0; i < team_ids.length; i++) {
+    for (let j = 0; j < team_ids.length; j++) {
+      if (i !== j)
+        matches.push({ home_team: team_ids[i], visiting_team: team_ids[j] })
+    }
+  }
 
   return NextResponse.json(
     {
       data: {
-        ...res,
+        ok: true,
       },
       toastInfo: {
         title: 'Campeonato iniciado com sucesso',

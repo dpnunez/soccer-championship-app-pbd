@@ -11,7 +11,7 @@ export default async function Home() {
   const session = await getServerSession(authConfig)
 
   if (session?.user) redirect(redirectUrl[session?.user?.type])
-  redirect('/login')
+  redirect('/sign-in')
 
   return null
 }
