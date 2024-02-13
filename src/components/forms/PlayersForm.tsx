@@ -17,6 +17,7 @@ import useSWR from 'swr'
 import { cn } from '@/lib/utils'
 import { useParams } from 'next/navigation'
 import { useToast } from '../ui/use-toast'
+import { AxiosError } from 'axios'
 
 interface DialogProps {
   open: boolean
@@ -82,10 +83,9 @@ const SelectPlayers = ({
         players: selectedPlayers,
         championship: Number(id),
       })
-
-      toast(toastInfo)
+      if (toastInfo) toast(toastInfo)
     } catch (err) {
-      toast(err.toastInfo)
+      toast((err as AxiosError).toastInfo)
     }
   }
 

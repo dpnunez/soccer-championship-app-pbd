@@ -32,7 +32,7 @@ export const CreatePlayerForm = () => {
   const onSubmit = form.handleSubmit(async (data) => {
     try {
       const { toastInfo } = await api.post('/api/player/create', data)
-      toast(toastInfo)
+      if (toastInfo) toast(toastInfo)
     } catch (err) {
       console.log(err)
     }

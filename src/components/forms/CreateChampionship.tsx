@@ -18,6 +18,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { TeamEmblem } from '@/components/TeamEmblem'
 import { useRouter } from 'next/navigation'
 import { useToast } from '@/components/ui/use-toast'
+import { AxiosError } from 'axios'
 
 interface Team {
   id: number
@@ -92,7 +93,7 @@ export function CreateChampionshipForm({ teams }: { teams: Team[] }) {
 
       router.push('/admin')
     } catch (err) {
-      toast(err.toastInfo)
+      toast((err as AxiosError).toastInfo)
     }
   })
 

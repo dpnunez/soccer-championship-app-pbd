@@ -3,6 +3,7 @@
 import { api } from '@/lib/api'
 import { Button } from './ui'
 import { useToast } from './ui/use-toast'
+import { AxiosError } from 'axios'
 
 export const ButtonStartChampionship = ({ id }: { id: number }) => {
   const { toast } = useToast()
@@ -13,9 +14,9 @@ export const ButtonStartChampionship = ({ id }: { id: number }) => {
       const { toastInfo } = await api.post('/api/championship/start', {
         id,
       })
-      toast(toastInfo)
+      if (toastInfo) toast(toastInfo)
     } catch (err) {
-      toast(err.toastInfo)
+      toast((err as AxiosError).toastInfo)
     }
   }
 
