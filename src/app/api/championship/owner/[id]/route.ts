@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 
-export async function GET() {
-  // Get jwt info team id
-  const paramId = 9 // ToDo: editar
+export async function GET(req: Request) {
+  const paramId = Number(req.url.split('/').pop())
 
   const res = await prisma.championship.findFirst({
     where: {

@@ -26,14 +26,12 @@ export async function POST(req: Request) {
   })
   const championshipId = res.id
 
-  const teamsRes = await prisma.team_championship.createMany({
+  await prisma.team_championship.createMany({
     data: teams.map((teamId: number) => ({
       id_team: teamId,
       id_championship: championshipId,
     })),
   })
-
-  console.log('teamres', teamsRes)
 
   return NextResponse.json({
     data: {

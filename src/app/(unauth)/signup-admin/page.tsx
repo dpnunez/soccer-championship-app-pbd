@@ -18,8 +18,7 @@ export default function LoginPage() {
 
   const onSubmit = form.handleSubmit(async (data) => {
     try {
-      const response = await api.post('/api/admin', data)
-      console.log(response)
+      await api.post('/api/admin', data)
     } catch {
       console.log('erro')
     }

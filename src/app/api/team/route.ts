@@ -16,8 +16,6 @@ export async function POST(req: Request) {
   const username = `team-${name.toLowerCase().replace(/\s/g, '-')}`
   const initialPassword = randomBytes(4).toString('hex')
 
-  console.log(id_team, 'id_team')
-
   const hashedPassword = await hash(initialPassword, 10)
 
   const owner = await prisma.user.create({

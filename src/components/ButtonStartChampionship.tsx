@@ -13,7 +13,6 @@ export const ButtonStartChampionship = ({ id }: { id: number }) => {
       const { toastInfo } = await api.post('/api/championship/start', {
         id,
       })
-      console.log('eressss', toastInfo)
       toast(toastInfo)
     } catch (err) {
       toast(err.toastInfo)
