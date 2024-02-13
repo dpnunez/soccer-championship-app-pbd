@@ -4,6 +4,9 @@ const api = axios.create({
   baseURL: 'http://localhost:3000',
 })
 
+api.interceptors.request.use(async (request) => {
+  return request
+})
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
