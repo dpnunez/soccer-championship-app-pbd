@@ -1,6 +1,7 @@
 import { SignOutButton } from '@/components/SignOutButton'
 import { authConfig } from '@/lib/next-auth'
 import { getServerSession } from 'next-auth'
+import { redirect } from 'next/navigation'
 
 export default async function Layout({
   children,
@@ -9,6 +10,11 @@ export default async function Layout({
 }>) {
   const session = await getServerSession(authConfig)
   const username = session?.user?.username
+  const type = session?.user?.type
+
+  if (type !== 'admin') {
+    redirect('/owner')
+  }
 
   return (
     <div>
