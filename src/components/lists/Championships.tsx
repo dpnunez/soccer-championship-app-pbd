@@ -18,7 +18,7 @@ export const ChampionshipList = async () => {
         <div key={t.id}>
           {t.name} - {t.status}
           {t.status === 'not_started' && <ButtonStartChampionship id={t.id} />}
-          {/* {t.status === 'started' && <ButtonViewChampionship id={t.id} />} */}
+          {t.status === 'started' && <ButtonViewChampionship id={t.id} />}
         </div>
       ))}
     </div>
