@@ -38,28 +38,21 @@ model goal {
 }
 
 model match {
-  id              Int          @id @default(autoincrement())
-  id_referee      Int?
-  id_championship Int
-  round           Int
-  goal            goal[]
-  championship    championship @relation(fields: [id_championship], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_championship")
-  referee         referee?     @relation(fields: [id_referee], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_referee")
-  match_stats     match_stats?
-}
-
-model match_stats {
-  id_match                                                                       Int                @id
-  id_championship                                                                Int
-  home_team                                                                      Int
-  visiting_team                                                                  Int
-  winner                                                                         Int?
-  is_draw                                                                        Boolean?           @default(dbgenerated("\nCASE\n    WHEN (winner IS NULL) THEN true\n    ELSE false\nEND"))
-  is_registered                                                                  Boolean?           @default(false)
-  team_championship_match_stats_home_team_id_championshipToteam_championship     team_championship  @relation("match_stats_home_team_id_championshipToteam_championship", fields: [home_team, id_championship], references: [id_team, id_championship], onDelete: NoAction, onUpdate: NoAction, map: "fk_home_team")
-  match                                                                          match              @relation(fields: [id_match], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_match")
-  team_championship_match_stats_visiting_team_id_championshipToteam_championship team_championship  @relation("match_stats_visiting_team_id_championshipToteam_championship", fields: [visiting_team, id_championship], references: [id_team, id_championship], onDelete: NoAction, onUpdate: NoAction, map: "fk_visiting_team")
-  team_championship_match_stats_winner_id_championshipToteam_championship        team_championship? @relation("match_stats_winner_id_championshipToteam_championship", fields: [winner, id_championship], references: [id_team, id_championship], onDelete: NoAction, onUpdate: NoAction, map: "fk_winner")
+  id                                                                       Int                @id @default(autoincrement())
+  id_referee                                                               Int?
+  id_championship                                                          Int
+  home_team                                                                Int
+  visiting_team                                                            Int
+  winner                                                                   Int?
+  is_draw                                                                  Boolean?           @default(dbgenerated("\nCASE\n    WHEN (winner IS NULL) THEN true\n    ELSE false\nEND"))
+  is_registered                                                            Boolean?           @default(false)
+  round                                                                    Int
+  goal                                                                     goal[]
+  championship                                                             championship       @relation(fields: [id_championship], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_championship")
+  team_championship_match_home_team_id_championshipToteam_championship     team_championship  @relation("match_home_team_id_championshipToteam_championship", fields: [home_team, id_championship], references: [id_team, id_championship], onDelete: NoAction, onUpdate: NoAction, map: "fk_home_team")
+  referee                                                                  referee?           @relation(fields: [id_referee], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_referee")
+  team_championship_match_visiting_team_id_championshipToteam_championship team_championship  @relation("match_visiting_team_id_championshipToteam_championship", fields: [visiting_team, id_championship], references: [id_team, id_championship], onDelete: NoAction, onUpdate: NoAction, map: "fk_visiting_team")
+  team_championship_match_winner_id_championshipToteam_championship        team_championship? @relation("match_winner_id_championshipToteam_championship", fields: [winner, id_championship], references: [id_team, id_championship], onDelete: NoAction, onUpdate: NoAction, map: "fk_winner")
 }
 
 model player {
@@ -102,16 +95,16 @@ model team {
 }
 
 model team_championship {
-  id_team                                                                  Int
-  id_championship                                                          Int
-  id_coach                                                                 Int?
-  goal                                                                     goal[]
-  match_stats_match_stats_home_team_id_championshipToteam_championship     match_stats[] @relation("match_stats_home_team_id_championshipToteam_championship")
-  match_stats_match_stats_visiting_team_id_championshipToteam_championship match_stats[] @relation("match_stats_visiting_team_id_championshipToteam_championship")
-  match_stats_match_stats_winner_id_championshipToteam_championship        match_stats[] @relation("match_stats_winner_id_championshipToteam_championship")
-  championship                                                             championship  @relation(fields: [id_championship], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_championship")
-  coach                                                                    coach?        @relation(fields: [id_coach], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_coach")
-  team                                                                     team          @relation(fields: [id_team], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_team")
+  id_team                                                      Int
+  id_championship                                              Int
+  id_coach                                                     Int?
+  goal                                                         goal[]
+  match_match_home_team_id_championshipToteam_championship     match[]      @relation("match_home_team_id_championshipToteam_championship")
+  match_match_visiting_team_id_championshipToteam_championship match[]      @relation("match_visiting_team_id_championshipToteam_championship")
+  match_match_winner_id_championshipToteam_championship        match[]      @relation("match_winner_id_championshipToteam_championship")
+  championship                                                 championship @relation(fields: [id_championship], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_championship")
+  coach                                                        coach?       @relation(fields: [id_coach], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_coach")
+  team                                                         team         @relation(fields: [id_team], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_team")
 
   @@id([id_team, id_championship])
 }
