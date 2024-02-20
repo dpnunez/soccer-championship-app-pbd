@@ -139,23 +139,3 @@ export const PlayersForm = ({
     </div>
   )
 }
-
-// <Dialog open={open} onOpenChange={handleClose}>
-//       <DialogContent>
-//         <DialogHeader>
-//           <DialogClose onClick={handleClose} />
-//           <DialogTitle>Time criado com sucesso</DialogTitle>
-//           <DialogDescription>
-//             A seguir você terá acesso as informações da conta para acessar o
-//             time
-//           </DialogDescription>
-//         </DialogHeader>
-//         <div>
-//           <p>username: {username}</p>
-//           <p>password: {tempPassword}</p>
-//         </div>
-//         <DialogFooter>
-//           <Button onClick={handleClose}>Fechar</Button>
-//         </DialogFooter>
-//       </DialogContent>
-//     </Dialog>

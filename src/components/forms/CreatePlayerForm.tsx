@@ -40,7 +40,13 @@ export const CreatePlayerForm = () => {
 
   return (
     <Form {...form}>
-      <form id="create-player-form" onSubmit={onSubmit}>
+      <form
+        id="create-player-form"
+        onSubmit={(e) => {
+          e.stopPropagation()
+          onSubmit(e)
+        }}
+      >
         <FormField
           control={form.control}
           name="name"

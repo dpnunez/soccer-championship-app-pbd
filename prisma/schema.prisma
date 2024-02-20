@@ -81,9 +81,9 @@ model player_championship {
 
 model referee {
   id      Int     @id @default(autoincrement())
-  name    String? @db.VarChar(100)
+  name    String  @db.VarChar(100)
   age     Int
-  picture String
+  picture String?
   match   match[]
 }
 

@@ -58,6 +58,7 @@ export async function POST(req: Request, props: Props) {
 
   const body = await req.json()
   const goals = body.goals
+  const idReferee = Number(body.id_referee)
 
   const match = await prisma.match.findUnique({
     where: {
@@ -106,6 +107,7 @@ export async function POST(req: Request, props: Props) {
       home_goals: homeGoals.length,
       visiting_goals: visitingGoals.length,
       is_registered: true,
+      id_referee: idReferee,
     },
   })
 

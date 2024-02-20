@@ -17,6 +17,9 @@ interface Match {
   is_registered: boolean
   home_goals: number
   visiting_goals: number
+  referee: {
+    name: string
+  }
 }
 
 interface Team {
@@ -60,7 +63,10 @@ export default async function Page({ params }: Props) {
                 {teams[match.home_team].team.name} {match.home_goals} x{' '}
                 {match.visiting_goals} {teams[match.visiting_team].team.name}
               </div>
-              <span>is registered - {JSON.stringify(match.is_registered)}</span>
+              <span>
+                is registered - {JSON.stringify(match.is_registered)}
+                {match.referee && ` - Árbitro: ${match.referee.name}`}
+              </span>
               {isAdmin && !match.is_registered && (
                 <Link
                   href={`/admin/championship/${id}/match/${match.id}`}

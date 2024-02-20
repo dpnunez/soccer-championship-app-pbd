@@ -31,6 +31,9 @@ export async function GET(req: Request, { params }: Parameters) {
     where: {
       id_championship: Number(params.id),
     },
+    include: {
+      referee: true,
+    },
   })
 
   const teams = await prisma.team_championship.findMany({
