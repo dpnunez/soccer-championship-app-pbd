@@ -47,6 +47,8 @@ model match {
   is_draw                                                                  Boolean?           @default(dbgenerated("\nCASE\n    WHEN (winner IS NULL) THEN true\n    ELSE false\nEND"))
   is_registered                                                            Boolean?           @default(false)
   round                                                                    Int
+  home_goals                                                               Int?
+  visiting_goals                                                           Int?
   goal                                                                     goal[]
   championship                                                             championship       @relation(fields: [id_championship], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_championship")
   team_championship_match_home_team_id_championshipToteam_championship     team_championship  @relation("match_home_team_id_championshipToteam_championship", fields: [home_team, id_championship], references: [id_team, id_championship], onDelete: NoAction, onUpdate: NoAction, map: "fk_home_team")

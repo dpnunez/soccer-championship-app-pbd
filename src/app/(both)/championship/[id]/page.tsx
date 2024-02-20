@@ -1,4 +1,7 @@
 import { api } from '@/lib/api'
+import { authConfig } from '@/lib/next-auth'
+import { getServerSession } from 'next-auth'
+import Link from 'next/link'
 
 interface Props {
   params: {
@@ -11,6 +14,8 @@ interface Match {
   home_team: number
   visiting_team: number
   is_registered: boolean
+  home_goals: number
+  visiting_goals: number
 }
 
 interface Team {
@@ -30,9 +35,12 @@ interface Rounds {
 
 export default async function Page({ params }: Props) {
   const id = params.id
+  const session = await getServerSession(authConfig)
   const { data } = await api.get(`/api/championship/${id}`)
   const rounds: Rounds = data.rounds
   const teams: Teams = data.teams
+
+  const isAdmin = session?.user.type === 'admin'
 
   return (
     <div>
@@ -45,12 +53,18 @@ export default async function Page({ params }: Props) {
           {matches.map((match) => (
             <div key={match.id} className="bg-slate-400 p-2 m-2">
               <div>
-                {teams[match.home_team].team.name} x{' '}
-                {teams[match.visiting_team].team.name}
+                {teams[match.home_team].team.name} {match.home_goals} x{' '}
+                {match.visiting_goals} {teams[match.visiting_team].team.name}
               </div>
               <span>is registered - {JSON.stringify(match.is_registered)}</span>
-              {/* {teams[match.id_team_home][0].team.name} x{' '}
-              {teams[match.id_team_visiting][0].team.name} */}
+              {isAdmin && !match.is_registered && (
+                <Link
+                  href={`/admin/championship/${id}/match/${match.id}`}
+                  className="p-4 bg-black/15 box-border"
+                >
+                  Cadastrar resultado
+                </Link>
+              )}
             </div>
           ))}
         </div>
