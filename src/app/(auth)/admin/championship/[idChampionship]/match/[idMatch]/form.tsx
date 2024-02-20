@@ -102,9 +102,6 @@ export const RegisterMatchForm = ({
             <GoalRegister team={home} />
             <GoalRegister team={visiting} />
           </div>
-          <Button onClick={() => console.log(form.getValues())}>
-            Get Form Values
-          </Button>
           <Button type="submit">Enviar</Button>
         </form>
       </Form>

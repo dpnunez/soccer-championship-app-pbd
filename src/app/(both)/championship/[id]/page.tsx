@@ -2,6 +2,7 @@ import { api } from '@/lib/api'
 import { authConfig } from '@/lib/next-auth'
 import { getServerSession } from 'next-auth'
 import Link from 'next/link'
+import { ChampionshipTable } from './Table'
 
 interface Props {
   params: {
@@ -37,6 +38,9 @@ export default async function Page({ params }: Props) {
   const id = params.id
   const session = await getServerSession(authConfig)
   const { data } = await api.get(`/api/championship/${id}`)
+  const {
+    data: { table },
+  } = await api.get(`/api/championship/${id}/table`)
   const rounds: Rounds = data.rounds
   const teams: Teams = data.teams
 
@@ -46,7 +50,7 @@ export default async function Page({ params }: Props) {
     <div>
       <h1 className="text-2xl font-bold">Campeonatos</h1>
 
-      <div>TABLE</div>
+      <ChampionshipTable data={table} />
       {Object.entries(rounds).map(([round, matches]) => (
         <div key={round}>
           <h2>Rodada {round}</h2>

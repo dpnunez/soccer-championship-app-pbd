@@ -90,8 +90,6 @@ export async function POST(req: Request, props: Props) {
     (goal: { id_team: number }) => goal.id_team === visitingId,
   )
 
-  console.log(goals)
-
   await prisma.goal.createMany({
     data: goals.map((goal: any) => ({
       ...goal,

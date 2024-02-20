@@ -35,8 +35,6 @@ export default async function Page({ params }: Props) {
   const { data: match } = await api.get<Match>(`/api/match/register/${idMatch}`)
   const [home, visiting] = Object.values(match.teams)
 
-  console.log(match)
-
   return (
     <div>
       <RegisterMatchForm

@@ -6,7 +6,7 @@ export const TeamEmblem = ({
   className,
 }: {
   emblem: string
-  className: string
+  className?: string
 }) => {
   return (
     <img
