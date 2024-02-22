@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui'
+import { Checkbox } from '@/components/ui/checkbox'
 import { useToast } from '@/components/ui/use-toast'
 import { api, fetcher } from '@/lib/api'
 import { useParams, useRouter } from 'next/navigation'
@@ -29,6 +30,10 @@ import { useState } from 'react'
 import { useFieldArray, useForm, useFormContext } from 'react-hook-form'
 import useSWR from 'swr'
 
+interface Card {
+  player: string
+  is_red: boolean
+}
 interface Team {
   id: number
   name: string
@@ -69,6 +74,8 @@ export const RegisterMatchForm = ({
     formId: 'home',
     players: playersByTeam[homeId],
   }
+
+  console.log(homeId)
   const visiting = {
     ...match.teams[visitingId],
     formId: 'visiting',
@@ -92,11 +99,26 @@ export const RegisterMatchForm = ({
         }),
       )
 
+      const home_cards = data.cards[home.formId].map((card: Card) => ({
+        id_player: Number(card.player),
+        is_red: card.is_red,
+        id_team: homeId,
+      }))
+
+      const visiting_cards = data.cards[visiting.formId].map((card: Card) => ({
+        id_player: Number(card.player),
+        is_red: card.is_red,
+        id_team: visitingId,
+      }))
+
+      const cards = [...home_cards, ...visiting_cards]
+
       const goals = [...homeGoals, ...visitingGoals]
 
       await api.post(`/api/match/register/${params.idMatch}`, {
         goals,
         id_referee: data.id_referee,
+        cards,
       })
 
       router.push(`/championship/${params.idChampionship}`)
@@ -110,14 +132,25 @@ export const RegisterMatchForm = ({
       <Form {...form}>
         <form onSubmit={onSubmit}>
           <Header home={home} visiting={visiting} />
+          <h1>Gols</h1>
           <div className="flex">
             <GoalRegister team={home} />
             <GoalRegister team={visiting} />
           </div>
 
+          <h1 className="text-3xl">Cartoes</h1>
+
+          <div className="flex">
+            <CardRegister team={home} />
+            <CardRegister team={visiting} />
+          </div>
+
           <h2>Arbitragem</h2>
           <RefereeSection />
           <Button type="submit">Enviar</Button>
+          {/* <Button type="button" onClick={() => console.log(form.getValues())}>
+            Logar
+          </Button> */}
         </form>
       </Form>
     </div>
@@ -189,6 +222,93 @@ const GoalRegister = ({ team }: GoalRegisterProps) => {
         }}
       >
         Add Goal
+      </Button>
+    </div>
+  )
+}
+
+const CardRegister = ({ team }: GoalRegisterProps) => {
+  const form = useFormContext()
+  const { fields, append, remove } = useFieldArray({
+    name: `cards.${team.formId}`,
+    control: form.control,
+  })
+
+  const playersAlreadyWithCard = (form.watch(`cards.${team.formId}`) || []).map(
+    (card: Card) => Number(card.player),
+  )
+
+  return (
+    <div className="flex-1">
+      <h2>{team.name}</h2>
+      <div className="flex-col flex">
+        {fields.map((field, index) => (
+          <div key={field.id} className="flex flex-col">
+            <FormField
+              control={form.control}
+              name={`cards.${team.formId}.${index}.player`}
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>Nome do jogador</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecionar Jogador" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {(team.players || []).map((player) => (
+                        <SelectItem
+                          disabled={playersAlreadyWithCard.includes(player.id)}
+                          key={player.id}
+                          value={String(player.id)}
+                        >
+                          {player.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name={`cards.${team.formId}.${index}.is_red`}
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormLabel>Cartão vermelho</FormLabel>
+                </FormItem>
+              )}
+            />
+            <button
+              type="button"
+              onClick={() => {
+                remove(index)
+              }}
+            >
+              Remove
+            </button>
+          </div>
+        ))}
+      </div>
+      <Button
+        type="button"
+        onClick={() => {
+          append({ player: undefined, is_red: false })
+        }}
+      >
+        Add Card
       </Button>
     </div>
   )
@@ -354,20 +474,6 @@ export const CreateRefereeForm = ({
             </FormItem>
           )}
         />
-
-        {/* <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Nome do Campeonato</FormLabel>
-              <FormControl>
-                <Input placeholder="Nome do Campeonato" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
       </form>
     </Form>
   )

@@ -39,8 +39,22 @@ export async function GET(req: Request, props: Props) {
       },
     },
   })
+
+  const penalities = await prisma.penalties.findMany({
+    where: {
+      round: match?.round,
+      id_championship: championshipId,
+    },
+  })
+
+  const bannedIds = penalities.map((e) => e.id_player)
+
   const playersByTeam = groupBy(
-    players.map(({ id_team, player }) => ({ id_team, ...player })),
+    players
+      .filter((e) => {
+        return !bannedIds.includes(e.id_player)
+      })
+      .map(({ id_team, player }) => ({ id_team, ...player })),
     'id_team',
   )
 
@@ -53,10 +67,17 @@ export async function GET(req: Request, props: Props) {
   })
 }
 
+interface Card {
+  is_red: boolean
+  id_team: number
+  id_player: number
+}
+
 export async function POST(req: Request, props: Props) {
   const id = props.params.id
 
   const body = await req.json()
+  const cards = body.cards
   const goals = body.goals
   const idReferee = Number(body.id_referee)
 
@@ -65,6 +86,8 @@ export async function POST(req: Request, props: Props) {
       id: parseInt(id),
     },
   })
+
+  const round = match?.round
 
   const isAlreadyRegistered = match?.is_registered
   if (isAlreadyRegistered) {
@@ -89,6 +112,16 @@ export async function POST(req: Request, props: Props) {
 
   const visitingGoals = goals.filter(
     (goal: { id_team: number }) => goal.id_team === visitingId,
+  )
+
+  await prisma.$transaction(
+    cards.map((e: Card) => {
+      if (e.is_red) {
+        return prisma.$executeRaw`CALL AdicionarCartaoVermelho(${e.id_team}::int, ${e.id_player}::int, ${championshipId}::int, ${round}::int);`
+      } else {
+        return prisma.$executeRaw`CALL AtribuirCartaoAmarelo(${e.id_team}::int, ${e.id_player}::int, ${championshipId}::int, ${round}::int);`
+      }
+    }),
   )
 
   await prisma.goal.createMany({

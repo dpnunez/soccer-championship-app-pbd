@@ -71,7 +71,10 @@ model player_championship {
   id_player       Int
   id_championship Int
   id_team         Int
+  yellow_cards    Int          @default(0)
+  cards           cards[]
   goal            goal[]
+  penalties       penalties[]
   championship    championship @relation(fields: [id_championship], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_championship")
   player          player       @relation(fields: [id_player], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_player")
   team            team         @relation(fields: [id_team], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_team")
@@ -119,4 +122,22 @@ model user {
   type     String @db.VarChar(50)
   id_team  Int?
   team     team?  @relation(fields: [id_team], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_team")
+}
+
+model cards {
+  id                  Int                 @id @default(autoincrement())
+  id_player           Int
+  id_team             Int
+  id_championship     Int
+  is_red              Boolean
+  player_championship player_championship @relation(fields: [id_player, id_championship], references: [id_player, id_championship], onDelete: NoAction, onUpdate: NoAction, map: "fk_player")
+}
+
+model penalties {
+  id                  Int                 @id @default(autoincrement())
+  id_player           Int
+  id_team             Int
+  id_championship     Int
+  round               Int
+  player_championship player_championship @relation(fields: [id_player, id_championship], references: [id_player, id_championship], onDelete: NoAction, onUpdate: NoAction, map: "fk_player")
 }

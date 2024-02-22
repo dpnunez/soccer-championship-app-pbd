@@ -28,12 +28,17 @@ interface Match {
   players: {
     [key: string]: Player[]
   }
+  match: {
+    home_team: number
+    visiting_team: number
+  }
 }
 
 export default async function Page({ params }: Props) {
   const idMatch = params.idMatch
   const { data: match } = await api.get<Match>(`/api/match/register/${idMatch}`)
-  const [home, visiting] = Object.values(match.teams)
+  const home = match.teams[match.match.home_team]
+  const visiting = match.teams[match.match.visiting_team]
 
   return (
     <div>
