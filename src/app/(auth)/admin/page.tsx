@@ -10,6 +10,15 @@ export default function AdminDashboard() {
 
       <TeamsList />
       <ChampionshipList />
+
+      <TeamsList />
+      <ChampionshipList />
+      <TeamsList />
+      <ChampionshipList />
+      <TeamsList />
+      <ChampionshipList />
+      <TeamsList />
+      <ChampionshipList />
     </main>
   )
 }

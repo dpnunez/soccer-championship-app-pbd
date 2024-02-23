@@ -2,6 +2,7 @@
 
 import { signOut } from 'next-auth/react'
 import { Button } from './ui'
+import { ExitIcon } from '@radix-ui/react-icons'
 
 export const SignOutButton = () => {
   return (
@@ -13,7 +14,9 @@ export const SignOutButton = () => {
         })
       }}
       variant="destructive"
+      className="flex gap-2"
     >
+      <ExitIcon />
       Sair
     </Button>
   )
