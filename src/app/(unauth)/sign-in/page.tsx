@@ -1,4 +1,3 @@
-'use client'
 import {
   Button,
   Card,
@@ -6,69 +5,29 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-  Input,
 } from '@/components/ui'
-import { useToast } from '@/components/ui/use-toast'
-import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { useForm } from 'react-hook-form'
+import { FormSignIn } from './Form'
 
 export default function LoginPage() {
-  const form = useForm()
-  const router = useRouter()
-  const { toast } = useToast()
-
-  const onSubmit = form.handleSubmit(async (data) => {
-    try {
-      const response = await signIn('credentials', {
-        redirect: false,
-        username: data.username,
-        password: data.password,
-      })
-
-      if (response?.ok) {
-        router.push('/auth')
-        return
-      }
-      toast({
-        title: 'Erro',
-        description: 'Usuário ou senha inválidos',
-        variant: 'destructive',
-      })
-    } catch {
-      console.log('erro')
-    }
-  })
-
   return (
     <div className="flex min-h-screen flex-col items-center justify-center p-24">
       <Card className="max-w-full w-[400px]">
         <CardHeader>
-          <div className="flex items-center justify-center h-8 relative">
+          <div className="flex items-center justify-center h-14 relative">
             <img
-              src="/vercel.svg"
+              src="/ball.png"
               alt="Logo"
-              className="absolute bottom-8 h-[200%]"
+              className="absolute bottom-7 h-[200%]"
             />
           </div>
           <CardTitle>Login</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={onSubmit} className="flex flex-col gap-4" id="login">
-            <Input
-              {...form.register('username')}
-              placeholder="Nome de usuário"
-            />
-            <Input
-              {...form.register('password')}
-              placeholder="Senha"
-              type="password"
-            />
-          </form>
+          <FormSignIn />
         </CardContent>
 
         <CardFooter>
-          <Button form="login" className="w-full">
+          <Button form="sign-in" className="w-full">
             Acessar
           </Button>
         </CardFooter>
