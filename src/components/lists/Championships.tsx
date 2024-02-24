@@ -1,5 +1,3 @@
-import { ButtonStartChampionship } from '../ButtonStartChampionship'
-import { ButtonViewChampionship } from '../ButtonViewChampionship'
 import { Championship } from '@/types/Entities'
 import {
   Badge,

@@ -32,7 +32,7 @@ interface SelectTeams {
 
 const SelectTeams = ({ teams }: SelectTeams) => {
   return (
-    <div className="grid grid-flow-col gap-4">
+    <div className="grid grid-cols-6 gap-4">
       {teams.map((team) => (
         <Team key={team.id} {...team} />
       ))}
@@ -60,7 +60,7 @@ const Team = ({ name, id, emblem }: Team) => {
     <div
       onClick={handleClick}
       className={cn(
-        'flex flex-col rounded-lg p-3 items-center hover:bg-slate-300 transition-all cursor-pointer ',
+        'flex flex-col rounded-lg p-3 items-center hover:bg-slate-300 transition-all cursor-pointer min-w-12 ',
         {
           'bg-gray-100 ring-1 ring-slate-300': isSelected,
         },

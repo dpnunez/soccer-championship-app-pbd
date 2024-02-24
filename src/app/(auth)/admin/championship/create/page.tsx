@@ -8,7 +8,7 @@ interface Team {
 }
 
 export default async function CreateChampionship() {
-  const teams: Team[] = await api.get('/api/team')
+  const teams = await api.get<Team[]>('/api/team')
 
-  return <CreateChampionshipForm teams={teams} />
+  return <CreateChampionshipForm teams={teams.data} />
 }
