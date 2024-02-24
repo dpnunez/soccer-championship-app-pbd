@@ -7,6 +7,37 @@ const championshipSchema = zod.object({
   }),
 })
 
-export type ChampionshipForm = zod.infer<typeof championshipSchema>
+const matchSchema = zod.object({
+  id_referee: zod.number(),
+  goals: zod.object({
+    home: zod.array(
+      zod.object({
+        player: zod.string(),
+      }),
+    ),
+    visiting: zod.array(
+      zod.object({
+        player: zod.string(),
+      }),
+    ),
+  }),
+  cards: zod.object({
+    home: zod.array(
+      zod.object({
+        player: zod.string(),
+        is_red: zod.boolean(),
+      }),
+    ),
+    visiting: zod.array(
+      zod.object({
+        player: zod.string(),
+        is_red: zod.boolean(),
+      }),
+    ),
+  }),
+})
 
-export { championshipSchema }
+export type ChampionshipForm = zod.infer<typeof championshipSchema>
+export type MatchForm = zod.infer<typeof matchSchema>
+
+export { championshipSchema, matchSchema }

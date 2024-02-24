@@ -14,7 +14,7 @@ export const TeamEmblem = ({
     <img
       src={emblem || defaultTeamEmblem}
       alt="team emblem"
-      className={cn(className, 'h-full')}
+      className={cn('h-full rounded-md', className)}
     />
   )
 }

@@ -30,6 +30,7 @@ interface Match {
   }
   match: {
     home_team: number
+    round: number
     visiting_team: number
   }
 }
@@ -40,9 +41,11 @@ export default async function Page({ params }: Props) {
   const home = match.teams[match.match.home_team]
   const visiting = match.teams[match.match.visiting_team]
 
+  console.log(match)
   return (
     <div>
       <RegisterMatchForm
+        round={match.match.round}
         match={match}
         homeId={home.id}
         visitingId={visiting.id}
