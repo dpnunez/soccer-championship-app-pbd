@@ -88,9 +88,11 @@ export const ChampionshipList = async ({
                       <PlayIcon className="mr-4" />
                       Iniciar campeonato
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <EyeOpenIcon className="mr-4" />
-                      Visualizar
+                    <DropdownMenuItem asChild>
+                      <Link href={`/championship/${ch.id}`}>
+                        <EyeOpenIcon className="mr-4" />
+                        Visualizar
+                      </Link>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

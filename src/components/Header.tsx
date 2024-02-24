@@ -1,7 +1,8 @@
-import { Avatar, AvatarFallback, Card } from '@/components/ui'
+import { Avatar, AvatarFallback, Card, DropdownMenu } from '@/components/ui'
 import { authConfig } from '@/lib/next-auth'
 import { getServerSession } from 'next-auth'
 import { SignOutButton } from './SignOutButton'
+import { ThemePicker } from './ThemePicker'
 
 export default async function Header({ children }: React.PropsWithChildren) {
   const session = await getServerSession(authConfig)
@@ -18,7 +19,10 @@ export default async function Header({ children }: React.PropsWithChildren) {
               <h2 className="text-lg font-medium">{session?.user.name}</h2>
             </div>
             <div className="flex items-center gap-4">{children}</div>
-            <SignOutButton />
+            <div className="flex gap-3">
+              <ThemePicker />
+              <SignOutButton />
+            </div>
           </Card>
         </div>
       </header>
