@@ -49,6 +49,7 @@ export async function GET(req: Request, { params }: Parameters) {
 
   return NextResponse.json({
     data: {
+      championship,
       rounds: _.groupBy(matches, 'round'),
       teams: teamsById,
     },

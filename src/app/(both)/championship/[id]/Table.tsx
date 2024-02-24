@@ -24,7 +24,8 @@ interface Props {
 export const ChampionshipTable = ({ data }: Props) => {
   return (
     <div>
-      <Table className="max-w-screen-md">
+      <h2 className="text-xl font-medium mb-4">Tabela de classificação</h2>
+      <Table>
         <TableHeader>
           <TableRow>
             <TableCell>#</TableCell>
