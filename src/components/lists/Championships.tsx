@@ -22,6 +22,7 @@ import {
   PlusIcon,
 } from '@radix-ui/react-icons'
 import { cn } from '@/lib/utils'
+import { ChampionshipStatus } from '../ChampionshipStatus'
 
 const statusToText = {
   not_started: 'Não Iniciado',
@@ -65,15 +66,7 @@ export const ChampionshipList = async ({
               </TableCell>
               <TableCell className="font-medium">
                 <div>
-                  <Badge
-                    className={cn('flex-nowrap text-nowrap', {
-                      'bg-green-500': ch.status === 'not_started',
-                      'bg-yellow-500': ch.status === 'started',
-                      'bg-red-500': ch.status === 'finished',
-                    })}
-                  >
-                    {statusToText[ch.status]}
-                  </Badge>
+                  <ChampionshipStatus status={ch.status} />
                 </div>
               </TableCell>
               <TableCell className="font-medium" align="center">

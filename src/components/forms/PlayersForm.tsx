@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import {
   Button,
+  Card,
   Dialog,
   DialogClose,
   DialogContent,
@@ -18,6 +19,7 @@ import { cn } from '@/lib/utils'
 import { useParams } from 'next/navigation'
 import { useToast } from '../ui/use-toast'
 import { AxiosError } from 'axios'
+import { PersonIcon, PlusIcon } from '@radix-ui/react-icons'
 
 interface DialogProps {
   open: boolean
@@ -91,23 +93,30 @@ const SelectPlayers = ({
 
   return (
     <div>
-      <h2>Selecione os jogadores</h2>
-      <div className="flex gap-4">
+      <h3 className="text-md text-primary opacity-45 mt-6 mb-2">
+        Selecione os jogadores
+      </h3>
+      <div className="flex gap-4 flex-wrap ">
         {players.map((player) => (
-          <div
-            className={cn('bg-slate-100', {
-              'bg-slate-200 ring-1 ring-slate-400 cursor-pointer':
-                selectedPlayers.includes(player.id),
-            })}
+          <Card
+            className={cn(
+              'p-2 text-nowrap px-4 cursor-pointer transition-all',
+              {
+                'bg-foreground text-primary-foreground':
+                  selectedPlayers.includes(player.id),
+              },
+            )}
             key={player.id}
             onClick={() => handleClickPlayer(player.id)}
           >
             <p>{player.name}</p>
-          </div>
+          </Card>
         ))}
       </div>
 
-      <Button onClick={onSave}>Salvar jogadores</Button>
+      <Button className="my-10" onClick={onSave}>
+        Salvar jogadores
+      </Button>
     </div>
   )
 }
@@ -122,10 +131,21 @@ export const PlayersForm = ({
   const list = players?.data ?? []
 
   return (
-    <div>
-      <h2>Jogadores</h2>
-
-      <Button onClick={() => setCreatePlayerModal(true)}>Criar jogador</Button>
+    <div className="mt-10">
+      <div className="flex gap-6 items-center">
+        <div className="flex gap-4 items-center">
+          <PersonIcon width={24} height={24} />
+          <h2 className="text-xl font-semibold">Jogadores</h2>
+        </div>
+        <Button
+          variant="outline"
+          onClick={() => setCreatePlayerModal(true)}
+          className="flex items-center gap-2"
+        >
+          <PlusIcon />
+          Criar jogador
+        </Button>
+      </div>
       <div className="flex gap-4">
         <SelectPlayers players={list} initial={initialPlayers} />
       </div>

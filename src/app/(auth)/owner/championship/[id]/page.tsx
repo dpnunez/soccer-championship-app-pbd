@@ -11,21 +11,26 @@ interface Props {
   }
 }
 
-// ToDo: find interface
+interface ResponseChampionhip {
+  championship: Championship
+}
+
 export default async function Page({ params }: Props) {
   const session = await getServerSession(authConfig)
   const username = session?.user.username
-  const { data } = await api.get<Championship>(
-    `/api/championship/owner/${params.id}`,
-  )
+  const {
+    data: { championship },
+  } = await api.get<ResponseChampionhip>(`/api/championship/${params.id}`)
   const { data: playersSelected } = await api.get<number[]>(
     `/api/player/subscribe?username=${username}&championship=${params.id}`,
   )
 
+  console.log(championship.status)
   return (
     <div>
-      <div className="flex justify-between">
-        {data.name} - <ChampionshipStatus status={data.status} />
+      <div className="flex gap-3">
+        <h1 className="text-2xl font-bold">{championship.name}</h1>
+        <ChampionshipStatus status={championship.status} />
       </div>
       <PlayersForm initialPlayers={playersSelected} />
     </div>

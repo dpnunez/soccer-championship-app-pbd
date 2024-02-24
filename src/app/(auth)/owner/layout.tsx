@@ -19,9 +19,11 @@ export default async function Layout({
   return (
     <div>
       <Header />
-      <main className="max-w-7xl w-full mx-auto">
-        <div className="w-full mx-4">{children}</div>
-      </main>
+      <div className="max-w-7xl w-full mx-auto mb-11">
+        <main className="mx-4">
+          <div>{children}</div>
+        </main>
+      </div>
     </div>
   )
 }
