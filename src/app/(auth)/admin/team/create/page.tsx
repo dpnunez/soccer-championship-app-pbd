@@ -61,6 +61,7 @@ export default function CreateTeamPage() {
   const onCloseModal = () => {
     setOpenAccountDialog(false)
     router.push('/admin')
+    router.refresh()
   }
 
   return (

@@ -8,9 +8,9 @@ export default async function Header({ children }: React.PropsWithChildren) {
 
   return (
     <div className="h-28">
-      <header className="w-screen fixed ">
+      <header className="w-screen fixed z-10">
         <div className="mx-auto w-full relative max-w-7xl">
-          <Card className="p-4 m-4 flex items-center justify-between bg-background/80 backdrop-blur-lg">
+          <Card className="p-4 m-4 flex items-center justify-between bg-background/70 backdrop-blur-lg">
             <div className="flex items-center gap-2">
               <Avatar>
                 <AvatarFallback>{session?.user.name[0]}</AvatarFallback>

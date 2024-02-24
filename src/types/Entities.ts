@@ -4,4 +4,10 @@ interface Championship {
   status: 'not_started' | 'started' | 'finished'
 }
 
-export type { Championship }
+interface Team {
+  id: number
+  name: string
+  emblem: string
+}
+
+export type { Championship, Team }

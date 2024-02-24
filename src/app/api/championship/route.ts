@@ -47,5 +47,5 @@ export async function POST(req: Request) {
 export async function GET() {
   const teams = await prisma.championship.findMany()
 
-  return NextResponse.json(teams)
+  return NextResponse.json({ data: teams })
 }
