@@ -92,6 +92,7 @@ export function CreateChampionshipForm({ teams }: { teams: Team[] }) {
       })
 
       router.push('/admin')
+      router.refresh()
     } catch (err) {
       toast((err as AxiosError).toastInfo)
     }

@@ -40,7 +40,7 @@ export const ChampionshipList = async ({
       <div className="flex justify-between">
         <h1 className="text-2xl font-bold mb-10">Times</h1>
         <Button asChild variant="outline">
-          <Link href="/admin/team/create">
+          <Link href="/admin/championship/create">
             <PlusIcon className="mr-2" />
             Criar Campeonato
           </Link>
